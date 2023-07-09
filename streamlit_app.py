@@ -13,12 +13,6 @@ model = tf.keras.models.load_model('my_model.h5', custom_objects={'get_f1': get_
 # Define the target image size
 target_size = (40, 40)
 
-# Define the labels
-labels = {
-    (1, 0, 0): 'Non-Invasive',
-    (0, 1, 0): 'Ostracod',
-    (0, 0, 1): 'Invasive'
-}
 
 # Function to preprocess the image
 def preprocess_image(image):
@@ -44,12 +38,19 @@ def predict_image(image):
 
     # Make predictions using the model
     predictions = model.predict(processed_image)
+    y = np.round(predictions)
 
-    # Get the rounded prediction
-    rounded_prediction = np.round(predictions[0])
+    res = []
+    for i in y:
+        if(i[0]==1):
+            res.append("Non-Invasive")
+        elif(i[1]==1):
+            res.append("Invasive")
+        else:
+            res.append("Ostracod")
 
     # Get the corresponding label
-    label = labels[tuple(rounded_prediction)]
+    label = res
 
     return label
 
