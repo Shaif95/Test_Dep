@@ -3,8 +3,12 @@ import tensorflow as tf
 from PIL import Image
 import numpy as np
 
-# Load the saved model
-model = tf.keras.models.load_model('my_model.h5')
+# Define the custom function
+def get_f1(y_true, y_pred):
+    return 0  # Blank function
+
+# Load the model with custom_objects argument
+model = tf.keras.models.load_model('my_model.h5', custom_objects={'get_f1': get_f1})
 
 # Define the target image size
 target_size = (40, 40)
