@@ -22,17 +22,18 @@ labels = {
 
 # Function to preprocess the image
 def preprocess_image(image):
-    # Resize the image using PIL
-    image = image.resize(target_size)
-
-    # Convert the image to a NumPy array
-    image_array = np.array(image)
+    # Resize the image using TensorFlow
+    resized_image = tf.image.resize_with_crop_or_pad(
+        tf.keras.preprocessing.image.img_to_array(image),
+        target_size[0],
+        target_size[1]
+    )
 
     # Normalize the image for deep learning
-    normalized_image = (image_array - 127.5) / 127.5
+    normalized_image = (resized_image - 127.5) / 127.5
 
     # Add an extra dimension to match the model input shape
-    processed_image = np.expand_dims(normalized_image, axis=0)
+    processed_image = tf.expand_dims(normalized_image, axis=0)
 
     return processed_image
 
@@ -65,7 +66,7 @@ def main():
         image = Image.open(uploaded_file)
 
         # Resize the image for display
-        resized_image = image.resize((200, 200))
+        resized_image = image.resize((20, 20))
 
         # Display the resized image
         st.image(resized_image, caption="Resized Image")
