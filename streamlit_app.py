@@ -11,7 +11,7 @@ def get_f1(y_true, y_pred):
 model = tf.keras.models.load_model('my_model.h5', custom_objects={'get_f1': get_f1})
 
 # Define the target image size
-target_size = (40, 40)
+target_size = (48, 48)
 
 
 # Function to preprocess the image
