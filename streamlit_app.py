@@ -13,19 +13,27 @@ model = tf.keras.models.load_model('my_model.h5', custom_objects={'get_f1': get_
 # Define the target image size
 target_size = (40, 40)
 
+# Define the labels
+labels = {
+    (1, 0, 0): 'Non-Invasive',
+    (0, 1, 0): 'Invasive',
+    (0, 0, 1): 'Ostracod'
+}
+
 # Function to preprocess the image
 def preprocess_image(image):
-    # Resize the image using PIL
-    image = image.resize(target_size)
-
-    # Convert the image to a NumPy array
-    image_array = np.array(image)
+    # Resize the image using TensorFlow
+    resized_image = tf.image.resize_with_crop_or_pad(
+        tf.keras.preprocessing.image.img_to_array(image),
+        target_size[0],
+        target_size[1]
+    )
 
     # Normalize the image for deep learning
-    normalized_image = (image_array - 127.5) / 127.5
+    normalized_image = (resized_image - 127.5) / 127.5
 
     # Add an extra dimension to match the model input shape
-    processed_image = np.expand_dims(normalized_image, axis=0)
+    processed_image = tf.expand_dims(normalized_image, axis=0)
 
     return processed_image
 
@@ -40,7 +48,10 @@ def predict_image(image):
     # Get the rounded prediction
     rounded_prediction = np.round(predictions[0])
 
-    return rounded_prediction
+    # Get the corresponding label
+    label = labels[tuple(rounded_prediction)]
+
+    return label
 
 # Streamlit app
 def main():
@@ -58,11 +69,11 @@ def main():
         st.image(image, caption="Original Image", use_column_width=True)
 
         # Process and predict the image
-        rounded_prediction = predict_image(image)
+        predicted_label = predict_image(image)
 
-        # Display the rounded prediction
-        st.write("Rounded Prediction:")
-        st.write(rounded_prediction)
+        # Display the predicted label
+        st.write("Predicted Label:")
+        st.write(predicted_label)
 
 # Run the app
 if __name__ == "__main__":
