@@ -16,16 +16,16 @@ target_size = (40, 40)
 # Function to preprocess the image
 def preprocess_image(image):
     # Resize the image using TensorFlow
-    image = tf.image.resize_with_crop_or_pad(
+    re_image = tf.image.resize_with_crop_or_pad(
         tf.keras.preprocessing.image.img_to_array(image),
         target_size[0],
         target_size[1]
     )
 
     # Normalize the image for deep learning
-    image = image / 255.0
+    re_image = re_image / 255.0
 
-    return image
+    return re_image
 
 # Function to make predictions
 def predict_image(image):
