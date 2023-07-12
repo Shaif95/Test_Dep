@@ -16,14 +16,19 @@ target_size = (40, 40)
 # Function to preprocess the image
 def preprocess_image(image):
     # Resize the image using TensorFlow
-    re_image = tf.image.resize_with_crop_or_pad(
-        tf.keras.preprocessing.image.img_to_array(image),40,40)
+    resized_image = tf.image.resize_with_crop_or_pad(
+        tf.keras.preprocessing.image.img_to_array(image),
+        target_size[0],
+        target_size[1]
+    )
 
     # Normalize the image for deep learning
-    re_image = re_image / 255.0
-    st.write(re_image.shape)
+    normalized_image = resized_image / 255
 
-    return np.array(re_image).astype('float32')
+    # Add an extra dimension to match the model input shape
+    processed_image = tf.expand_dims(normalized_image, axis=0)
+
+    return processed_image
 
 # Function to make predictions
 def predict_image(image):
@@ -31,14 +36,14 @@ def predict_image(image):
     processed_image = preprocess_image(image)
 
     # Make predictions using the model
-    pred = model.predict(processed_image)
-    y = np.argmax( pred )
+    predictions = model.predict(processed_image)
+    y = np.round(predictions)
 
     res = []
     for i in y:
-        if(i==0):
+        if(i[0]==1):
             res.append("Non-Invasive")
-        elif(i==1):
+        elif(i[1]==1):
             res.append("Invasive")
         else:
             res.append("Ostracod")
