@@ -21,7 +21,7 @@ def preprocess_image(image):
 
     # Normalize the image for deep learning
     re_image = re_image / 255.0
-    print(re_image.shape)
+    st.write(re_image.shape)
 
     return re_image
 
