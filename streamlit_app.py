@@ -6,7 +6,6 @@ import numpy as np
 # Define the custom function
 def get_f1(y_true, y_pred):
     return 0  # Blank function
-
 # Load the model with custom_objects argument
 model = tf.keras.models.load_model('single_image_model.h5', custom_objects={'get_f1': get_f1})
 
