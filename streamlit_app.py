@@ -23,7 +23,7 @@ def preprocess_image(image):
     re_image = re_image / 255.0
     st.write(re_image.shape)
 
-    return re_image
+    return re_image.astype('float32')
 
 # Function to make predictions
 def predict_image(image):
