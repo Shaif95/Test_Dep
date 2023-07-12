@@ -34,7 +34,7 @@ def predict_image(image):
 
     # Make predictions using the model
     pred = model.predict(processed_image)
-    y = np.argmax(p) for p in pred
+    y = np.argmax( pred )
 
     res = []
     for i in y:
